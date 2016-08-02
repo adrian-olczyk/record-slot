@@ -1,6 +1,7 @@
 {
   "name": "record-slot",
   "version": "0.0.0",
+  "author": "Adrian Olczyk <adrian@olczyk.me>",
   "main": "server/app.js",
   "dependencies": {
     "express": "^4.13.3",
