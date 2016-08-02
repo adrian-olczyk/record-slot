@@ -398,6 +398,14 @@ gulp.task('test', cb => {
     return runSequence('test:server', 'test:client', cb);
 });
 
+gulp.task('test:server:unit', cb => {
+  runSequence(
+    'env:all',
+    'env:test',
+    'mocha:unit',
+    cb);
+});
+
 gulp.task('test:server', cb => {
     runSequence(
         'env:all',
