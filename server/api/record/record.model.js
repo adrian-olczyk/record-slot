@@ -3,9 +3,16 @@
 import mongoose from 'mongoose';
 
 var RecordSchema = new mongoose.Schema({
+  configuration_id: {
+    type: String,
+    unique: true
+  },
   name: String,
-  info: String,
-  active: Boolean
+  description: String,
+  slots: [{
+    provider: Number,
+    options: String
+  }]
 });
 
 export default mongoose.model('Record', RecordSchema);
