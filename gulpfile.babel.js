@@ -406,6 +406,14 @@ gulp.task('test:server:unit', cb => {
     cb);
 });
 
+gulp.task('test:server:integration', cb => {
+  runSequence(
+    'env:all',
+    'env:test',
+    'mocha:integration',
+    cb);
+});
+
 gulp.task('test:server', cb => {
     runSequence(
         'env:all',
