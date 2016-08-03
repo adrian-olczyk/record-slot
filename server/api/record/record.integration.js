@@ -5,8 +5,6 @@ var app = require('../..');
 import request from 'supertest';
 import Record from './record.model';
 
-var newRecord;
-
 describe('Record API:', function() {
 
   describe('GET /api/records', function() {
@@ -82,74 +80,76 @@ describe('Record API:', function() {
       // FIXME
     });
 
-    afterEach(function(done){
-      Record.find({}).remove(done);
-    });
+    afterEach(removeAllRecords);
   });
 
-  return;
-
   describe('GET /api/records/:id', function() {
-    var record;
+    var newRecord;
 
     beforeEach(function(done) {
-      request(app)
-        .get('/api/records/' + newRecord._id)
-        .expect(200)
-        .expect('Content-Type', /json/)
-        .end((err, res) => {
-          if (err) {
-            return done(err);
-          }
-          record = res.body;
-          done();
-        });
+      createNewRecord({ name: 'New record', description: '-' }, function(err, record){
+        expect(err).to.be.null;
+        newRecord = record;
+        done();
+      });
     });
 
-    afterEach(function() {
-      record = {};
+    it('should respond with the requested record', function(done) {
+      getRecord(newRecord._id, function(err, record){
+        expect(err).to.be.null;
+
+        expect(record._id).to.equal(newRecord._id);
+        expect(record.name).to.equal(newRecord.name);
+        expect(record.description).to.equal(newRecord.description);
+        // FIXME test slots
+
+        done();
+      });
     });
 
-    it('should respond with the requested record', function() {
-      expect(record.name).to.equal('New Record');
-      expect(record.info).to.equal('This is the brand new record!!!');
-    });
-
+    afterEach(removeAllRecords);
   });
 
   describe('PUT /api/records/:id', function() {
-    var updatedRecord;
+    var newRecord;
 
     beforeEach(function(done) {
-      request(app)
-        .put('/api/records/' + newRecord._id)
-        .send({
-          name: 'Updated Record',
-          info: 'This is the updated record!!!'
-        })
-        .expect(200)
-        .expect('Content-Type', /json/)
-        .end(function(err, res) {
-          if (err) {
-            return done(err);
-          }
-          updatedRecord = res.body;
-          done();
-        });
+      createNewRecord({ name: 'New record', description: '-' }, function(err, record){
+        expect(err).to.be.null;
+        newRecord = record;
+        done();
+      });
     });
 
-    afterEach(function() {
-      updatedRecord = {};
+    it('should respond with the updated record', function(done) {
+      var updatedRecord = {
+        name: 'Updated Record',
+        description: 'This is the updated record!!!'
+      };
+
+      updateRecord(newRecord._id, updatedRecord, function(err, record){
+        expect(err).to.be.null;
+
+        expect(record.name).to.equal(updatedRecord.name);
+        expect(record.description).to.equal(updatedRecord.description);
+
+        done();
+      });
     });
 
-    it('should respond with the updated record', function() {
-      expect(updatedRecord.name).to.equal('Updated Record');
-      expect(updatedRecord.info).to.equal('This is the updated record!!!');
-    });
-
+    afterEach(removeAllRecords);
   });
 
   describe('DELETE /api/records/:id', function() {
+    var newRecord;
+
+    beforeEach(function(done){
+      createNewRecord({ name: 'Record', description: '-' }, function(err, record){
+        expect(err).to.be.null;
+        newRecord = record;
+        done();
+      });
+    });
 
     it('should respond with 204 on successful removal', function(done) {
       request(app)
@@ -159,13 +159,17 @@ describe('Record API:', function() {
           if (err) {
             return done(err);
           }
-          done();
+
+          Record.count({}).then((count) => {
+            expect(count).to.be.equal(0);
+            done();
+          });
         });
     });
 
     it('should respond with 404 when record does not exist', function(done) {
       request(app)
-        .delete('/api/records/' + newRecord._id)
+        .delete('/api/records/apple-pie')
         .expect(404)
         .end((err, res) => {
           if (err) {
@@ -175,8 +179,8 @@ describe('Record API:', function() {
         });
     });
 
+    afterEach(removeAllRecords);
   });
-
 });
 
 /**
@@ -196,4 +200,50 @@ function createNewRecord(data, done){
       }
       done(null, res.body);
     });
+}
+
+/**
+ *
+ * @param {String} recordId
+ * @param {Function} done
+ */
+function getRecord(recordId, done){
+  request(app)
+    .get('/api/records/' + recordId)
+    .expect(200)
+    .expect('Content-Type', /json/)
+    .end((err, res) => {
+      if (err) {
+        return done(err);
+      }
+      done(null, res.body);
+    });
+}
+
+/**
+ *
+ * @param {String} recordId
+ * @param {Object} recordData
+ * @param {Function} done
+ */
+function updateRecord(recordId, recordData, done){
+  request(app)
+    .put('/api/records/' + recordId)
+    .send(recordData)
+    .expect(200)
+    .expect('Content-Type', /json/)
+    .end(function(err, res) {
+      if (err) {
+        return done(err);
+      }
+      done(null, res.body);
+    });
+}
+
+/**
+ *
+ * @param done
+ */
+function removeAllRecords(done){
+  Record.find({}).remove(done);
 }
