@@ -212,7 +212,12 @@ describe('Record API:', function() {
     it('should respond with the updated record', function(done) {
       var updatedRecord = {
         name: 'Updated Record',
-        description: 'This is the updated record!!!'
+        description: 'This is the updated record!!!',
+        slots: [
+          { provider: 1, options: 'Test 1' },
+          { provider: 2, options: 'Test 2' },
+          { provider: 3, options: 'Test 3' }
+        ]
       };
 
       updateRecord(newRecord._id, updatedRecord, function(err, record){
@@ -220,6 +225,28 @@ describe('Record API:', function() {
 
         expect(record.name).to.equal(updatedRecord.name);
         expect(record.description).to.equal(updatedRecord.description);
+
+        done();
+      });
+    });
+
+    it('should remove slots from the new record', function(done) {
+      var updatedRecord = {
+        name: 'Updated Record',
+        description: 'This is the updated record!!!',
+        slots: [
+          { provider: 1, options: 'Test 1' },
+          { provider: 3, options: 'Test 3' }
+        ]
+      };
+
+      updateRecord(newRecord._id, updatedRecord, function(err, record){
+        expect(err).to.be.null;
+
+        expect(record.name).to.equal(updatedRecord.name);
+        expect(record.description).to.equal(updatedRecord.description);
+
+        expect(updatedRecord.slots).to.have.lengthOf(2);
 
         done();
       });
