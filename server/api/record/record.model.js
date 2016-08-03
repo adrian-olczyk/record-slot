@@ -3,10 +3,6 @@
 import mongoose from 'mongoose';
 
 var RecordSchema = new mongoose.Schema({
-  configuration_id: {
-    type: String,
-    unique: true
-  },
   name: {
     type: String,
     required: true
@@ -16,6 +12,10 @@ var RecordSchema = new mongoose.Schema({
     provider: Number,
     options: String
   }]
+});
+
+RecordSchema.virtual('configuration_id').get(function(){
+  return this._id;
 });
 
 export default mongoose.model('Record', RecordSchema);

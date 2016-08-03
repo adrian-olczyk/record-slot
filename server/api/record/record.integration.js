@@ -1,6 +1,7 @@
 'use strict';
 
 var _ = require('lodash');
+var async = require('async');
 var app = require('../..');
 import request from 'supertest';
 import Record from './record.model';
@@ -69,6 +70,27 @@ describe('Record API:', function() {
         expect(record.slots[0].options).to.equal(newRecordData.slots[0].options);
 
         done();
+      });
+    });
+
+    it('should create multiple records', function(done) {
+      var newRecordData = {
+        name: 'Test record ' + Math.round((Math.random() * 1000)),
+        description: 'Aenean eleifend sodales nibh ac sagittis.',
+        slots: [{
+          provider: 2,
+          options: 'Aenean eleifend sodales nibh ac sagittis.'
+        }]
+      };
+      var numberOfRecordsToCreate = 5;
+      var createRecordFunctions = Array(numberOfRecordsToCreate).fill(createNewRecord.bind(null, newRecordData));
+
+      async.parallel(createRecordFunctions, function(err){
+        expect(err).to.be.null;
+        Record.count({}).then((count) => {
+          expect(count).to.be.equal(numberOfRecordsToCreate);
+          done();
+        });
       });
     });
 
@@ -262,7 +284,7 @@ function createNewRecord(data, done){
     .expect('Content-Type', /json/)
     .end((err, res) => {
       if (err) {
-        return done(err);
+        return done(err, res);
       }
       done(null, res.body);
     });
