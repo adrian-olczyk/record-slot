@@ -55,8 +55,11 @@ function handleEntityNotFound(res) {
 function handleError(res, statusCode) {
   statusCode = statusCode || 500;
   return function(err) {
-    if (err.name === 'CastError' && err.path === '_id'){
+    if (err.name === 'CastError' && err.path === '_id') {
       handleEntityNotFound(res)();
+    }
+    else if (err.name === 'ValidationError') {
+      res.status(400).send(err);
     }
     else {
       res.status(statusCode).send(err);

@@ -33,22 +33,22 @@ describe('Record API:', function() {
 
   describe('POST /api/records', function() {
     it('should respond with the newly created record', function(done) {
-      var newRecord = {
+      var newRecordData = {
         name: 'Test record ' + Math.round((Math.random() * 1000)),
         description: 'Aenean eleifend sodales nibh ac sagittis.',
         slots: []
       };
 
-      createNewRecord(newRecord, function(err, result){
+      createNewRecord(newRecordData, function(err, result){
         expect(err).to.be.null;
         result = _.omit(result, ['__v', '_id']);
-        expect(result).to.deep.equal(newRecord);
+        expect(result).to.deep.equal(newRecordData);
         done();
       });
     });
 
     it('should respond with the newly created record that has one slot', function(done) {
-      var newRecord = {
+      var newRecordData = {
         name: 'Test record ' + Math.round((Math.random() * 1000)),
         description: 'Aenean eleifend sodales nibh ac sagittis.',
         slots: [{
@@ -57,27 +57,93 @@ describe('Record API:', function() {
         }]
       };
 
-      createNewRecord(newRecord, function(err, record){
+      createNewRecord(newRecordData, function(err, record){
         expect(err).to.be.null;
 
-        expect(record.name).to.equal(newRecord.name);
-        expect(record.description).to.equal(newRecord.description);
+        expect(record.name).to.equal(newRecordData.name);
+        expect(record.description).to.equal(newRecordData.description);
 
         expect(record.slots).to.be.instanceOf(Array);
         expect(record.slots).to.have.lengthOf(1);
-        expect(record.slots[0].provider).to.equal(newRecord.slots[0].provider);
-        expect(record.slots[0].options).to.equal(newRecord.slots[0].options);
+        expect(record.slots[0].provider).to.equal(newRecordData.slots[0].provider);
+        expect(record.slots[0].options).to.equal(newRecordData.slots[0].options);
 
         done();
       });
     });
 
-    it.skip('should return an error if record is invalid', function(done){
-      // FIXME
+    it('should respond with validation error if record name is missing', function(done) {
+      var newRecordData = {
+        name: '',
+        description: 'Aenean eleifend sodales nibh ac sagittis.'
+      };
+
+      request(app)
+        .post('/api/records')
+        .send(newRecordData)
+        .expect(400)
+        .expect('Content-Type', /json/)
+        .end((err, res) => {
+          expect(err).to.be.null;
+          done(null);
+        });
     });
 
-    it.skip('should return an error if record\'s slot is invalid', function(done){
-      // FIXME
+    it('should respond with validation error if slot provider is not an integer', function(done) {
+      var newRecordData = {
+        name: 'Record name',
+        description: 'Aenean eleifend sodales nibh ac sagittis.',
+        slots: [{
+          provider: 'ivalid-provider',
+          description: ''
+        }]
+      };
+
+      request(app)
+        .post('/api/records')
+        .send(newRecordData)
+        .expect(400)
+        .expect('Content-Type', /json/)
+        .end((err, res) => {
+          expect(err).to.be.null;
+          done(null);
+        });
+    });
+
+    it('should respond with validation error if slot is not an object', function(done) {
+      var newRecordData = {
+        name: 'Record name',
+        description: 'Aenean eleifend sodales nibh ac sagittis.',
+        slots: [ 'cake-is-a-lie' ]
+      };
+
+      request(app)
+        .post('/api/records')
+        .send(newRecordData)
+        .expect(400)
+        .expect('Content-Type', /json/)
+        .end((err, res) => {
+          expect(err).to.be.null;
+          done(null);
+        });
+    });
+
+    it('should respond with validation error if slots are not an array or null', function(done) {
+      var newRecordData = {
+        name: 'Record name',
+        description: 'Aenean eleifend sodales nibh ac sagittis.',
+        slots: 'cake-is-a-lie'
+      };
+
+      request(app)
+        .post('/api/records')
+        .send(newRecordData)
+        .expect(400)
+        .expect('Content-Type', /json/)
+        .end((err, res) => {
+          expect(err).to.be.null;
+          done(null);
+        });
     });
 
     afterEach(removeAllRecords);
