@@ -23,8 +23,11 @@ class RecordComponent {
       .then(response => {
         this.record = response.data;
       })
-      .catch(() => {
-        // FIXME redirect on 404
+      .catch((err) => {
+        if (err.status === 404){
+          this.$state.go('404');
+        }
+        // FIXME handle other errors
       });
   }
 
