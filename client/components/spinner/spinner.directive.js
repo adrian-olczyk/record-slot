@@ -1,3 +1,5 @@
+'use strict';
+
 (function(){
   angular.module('recordSlotApp')
     .directive('spinner', function() {
