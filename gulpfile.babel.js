@@ -681,7 +681,7 @@ grunt.loadNpmTasks('grunt-build-control');
 
 gulp.task('buildcontrol:heroku', function(done) {
     grunt.tasks(
-        ['buildcontrol:heroku'],    //you can add more grunt tasks in this array
+        ['build', 'buildcontrol:heroku'],    //you can add more grunt tasks in this array
         {gruntfile: false}, //don't look for a Gruntfile - there is none. :-)
         function() {done();}
     );
