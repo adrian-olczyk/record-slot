@@ -5,7 +5,6 @@ describe('Component: mainComponent', function() {
   // load the controller's module
   beforeEach(module('recordSlotApp'));
   beforeEach(module('stateMock'));
-  beforeEach(module('socketMock'));
 
   var scope;
   var mainComponent;
@@ -13,25 +12,23 @@ describe('Component: mainComponent', function() {
   var $httpBackend;
 
   // Initialize the controller and a mock scope
-  beforeEach(inject(function(_$httpBackend_, $http, $componentController, $rootScope, $state,
-    socket) {
+  beforeEach(inject(function(_$httpBackend_, $http, $componentController, $rootScope, $state, Notification, $log) {
     $httpBackend = _$httpBackend_;
-    $httpBackend.expectGET('/api/things')
-      .respond(['HTML5 Boilerplate', 'AngularJS', 'Karma', 'Express']);
+    $httpBackend.expectGET('/api/records')
+      .respond([]);
 
     scope = $rootScope.$new();
     state = $state;
     mainComponent = $componentController('main', {
-      $http: $http,
-      $scope: scope,
-      socket: socket
+      $http, Notification, $log
     });
   }));
 
   it('should attach a list of things to the controller', function() {
     mainComponent.$onInit();
     $httpBackend.flush();
-    expect(mainComponent.awesomeThings.length)
-      .to.equal(4);
+
+    expect(mainComponent.records.length)
+      .to.equal(0);
   });
 });

@@ -27,6 +27,11 @@ module.exports = function(config) {
       'client/bower_components/lodash/dist/lodash.compat.js',
       'client/bower_components/angular-socket-io/socket.js',
       'client/bower_components/angular-ui-router/release/angular-ui-router.js',
+      'client/bower_components/angular-animate/angular-animate.js',
+      'client/bower_components/velocity/velocity.js',
+      'client/bower_components/velocity/velocity.ui.js',
+      'client/bower_components/angular-velocity/angular-velocity.min.js',
+      'client/bower_components/angular-ui-notification/dist/angular-ui-notification.js',
       'client/bower_components/angular-mocks/angular-mocks.js',
       // endbower
       'node_modules/socket.io-client/socket.io.js',
