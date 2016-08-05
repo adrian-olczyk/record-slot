@@ -36,6 +36,7 @@ form{
 
 // Component styles are injected through grunt
 /* inject:scss */
+@import 'fourofour/fourofour';
 @import 'main/main';
 @import 'record/record';
 @import '../components/footer/footer';
