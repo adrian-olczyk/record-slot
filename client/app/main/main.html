@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container main">
   <div class="row">
     <div class="col-lg-12 records">
       <spinner ng-show="ctrl.loading"></spinner>
@@ -11,7 +11,7 @@
         <div class="col-lg-6">
           <button type="button" class="close hidden-lg" ng-click="ctrl.removeRecord(record)">&times;</button>
           <h2>{{record.name}}</h2>
-          <p>{{record.description}}</p>
+          <div class="description">{{record.description || '-'}}</div>
           <a ui-sref="record/edit({recordId: record.configuration_id})" class="visible-lg">Edit</a>
         </div>
         <div class="col-lg-6">
