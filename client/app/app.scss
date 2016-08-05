@@ -1,3 +1,11 @@
+/**
+ * Overwrite some default boostrap styles
+ */
+$headings-font-weight: 300;
+$font-size-base: 12px;
+$font-family-sans-serif:  "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif !default;
+
+
 $icon-font-path: "../bower_components/bootstrap-sass-official/vendor/assets/fonts/bootstrap/";
 @import '../bower_components/bootstrap-sass-official/vendor/assets/stylesheets/bootstrap';
 $fa-font-path: "../bower_components/font-awesome/fonts";
@@ -14,9 +22,23 @@ $fa-font-path: "../bower_components/font-awesome/fonts";
   padding: 0.2em 0;
 }
 
+form{
+  &.ng-submitted .ng-invalid{
+    border: 1px solid $brand-danger;
+  }
+
+  .ng-touched.ng-invalid{
+    border: 1px solid $brand-danger;
+  }
+}
+
+
+
 // Component styles are injected through grunt
 /* inject:scss */
 @import 'main/main';
+@import 'record/record';
 @import '../components/footer/footer';
 @import '../components/modal/modal';
+@import '../components/spinner/spinner';
 /* endinject */

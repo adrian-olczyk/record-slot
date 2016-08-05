@@ -3,42 +3,44 @@
 (function() {
 
   class MainController {
-
     constructor($http, $scope, socket) {
       this.$http = $http;
       this.socket = socket;
-      this.awesomeThings = [];
+      this.records = [];
+      this.loading = true;
 
       $scope.$on('$destroy', function() {
-        socket.unsyncUpdates('thing');
+        socket.unsyncUpdates('records');
       });
     }
 
     $onInit() {
-      this.$http.get('/api/things')
+      this.$http.get('/api/records')
         .then(response => {
-          this.awesomeThings = response.data;
-          this.socket.syncUpdates('thing', this.awesomeThings);
+          this.loading = false;
+          this.records = response.data;
+          this.socket.syncUpdates('records', this.records);
         });
     }
 
-    addThing() {
-      if (this.newThing) {
-        this.$http.post('/api/things', {
-          name: this.newThing
-        });
-        this.newThing = '';
+    removeRecord(record){
+      var index = this.records.indexOf(record);
+      if (index > -1 && confirm('Are you sure?')){
+        this.records.splice(index, 1);
+        this.$http.delete('/api/records/' + record._id)
+          .catch((err) => {
+            // FIXME handle error
+            console.error(err);
+            this.records.splice(index, 0, record);
+          });
       }
-    }
-
-    deleteThing(thing) {
-      this.$http.delete('/api/things/' + thing._id);
     }
   }
 
   angular.module('recordSlotApp')
     .component('main', {
       templateUrl: 'app/main/main.html',
-      controller: MainController
+      controller: MainController,
+      controllerAs: 'ctrl'
     });
 })();

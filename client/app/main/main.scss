@@ -22,6 +22,17 @@
   background: #4393B9;
 }
 
+.records {
+  padding-top: $padding-large-horizontal;
+  .record {
+    border-bottom: 1px solid $gray-lighter;
+    padding: $padding-large-horizontal 0;
+    h2, h4{
+      margin-top: 0;
+    }
+  }
+}
+
 .navbar-text {
   margin-left: 15px;
 }

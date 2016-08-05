@@ -1,28 +1,36 @@
-<header class="hero-unit" id="banner">
-  <div class="container">
-    <h1>'Allo, 'Allo!</h1>
-    <p class="lead">Kick-start your next web app with Angular Fullstack</p>
-    <img src="assets/images/yeoman.png" alt="I'm Yeoman">
-  </div>
-</header>
-
 <div class="container">
   <div class="row">
-    <div class="col-lg-12">
-      <h1 class="page-header">Features:</h1>
-      <ul class="nav nav-tabs nav-stacked col-md-4 col-lg-4 col-sm-6" ng-repeat="thing in $ctrl.awesomeThings">
-        <li><a href="#" uib-tooltip="{{thing.info}}">{{thing.name}}<button type="button" class="close" ng-click="$ctrl.deleteThing(thing)">&times;</button></a></li>
-      </ul>
+    <div class="col-lg-12 records">
+      <spinner ng-show="ctrl.loading"></spinner>
+
+      <div class="record row velocity-opposites-transition-slideRightIn"
+           ng-repeat="record in ctrl.records"
+           data-velocity-opts="{ stagger: 150, duration: 250 }"
+           ng-hide="ctrl.loading"
+           ng-show="ctrl.records.length > 0">
+        <div class="col-lg-6">
+          <h2>{{record.name}}</h2>
+          <p>{{record.description}}</p>
+          <a ui-sref="record/edit({recordId: record._id})">Edit</a>
+        </div>
+        <div class="col-lg-6">
+          <button type="button" class="close" ng-click="ctrl.removeRecord(record)">&times;</button>
+          <h4>Slots:</h4>
+          <ul ng-show="record.slots.length > 0">
+            <li ng-repeat="slot in record.slots">
+              <strong>{{ slot.provider | slotProvider }}:</strong>
+              {{ slot.options }}
+            </li>
+          </ul>
+          <i ng-hide="record.slots.length > 0">No slots has been added</i>
+        </div>
+      </div>
+
+      <div class="col-md-12 text-center" ng-hide="ctrl.records.length > 0 || ctrl.loading">
+        <h2>How did you end up with no records? ;)</h2>
+        <p>No worries, just create a new one</p>
+        <p><a class="btn btn-primary" ui-sref="record/create">Add first record</a></p>
+      </div>
     </div>
   </div>
-
-  <form class="thing-form">
-    <label>Syncs in realtime across clients</label>
-    <p class="input-group">
-      <input type="text" class="form-control" placeholder="Add a new thing here." ng-model="$ctrl.newThing">
-      <span class="input-group-btn">
-        <button type="submit" class="btn btn-primary" ng-click="$ctrl.addThing()">Add New</button>
-      </span>
-    </p>
-  </form>
 </div>
