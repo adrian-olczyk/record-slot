@@ -3,7 +3,7 @@
 (function(){
 
 class RecordComponent {
-  constructor($stateParams, $http, $state, slotProviders) {
+  constructor($stateParams, $http, $state, slotProviders, Notification, $log) {
     this.recordId = $stateParams.recordId;
     this.isNew = !this.recordId;
 
@@ -11,6 +11,8 @@ class RecordComponent {
     this.$state = $state;
     this.record = {};
     this.loading = true;
+    this.Notification = Notification;
+    this.$log = $log;
 
     this.availableProviders = slotProviders;
 
@@ -32,8 +34,12 @@ class RecordComponent {
       .catch((err) => {
         if (err.status === 404){
           this.$state.go('404');
+          this.Notification.error('Record not found');
+          return;
         }
-        // FIXME handle other errors
+
+        this.Notification.error('An error has occurred, please try again later');
+        this.$log.error(err);
       });
   }
 
@@ -50,16 +56,18 @@ class RecordComponent {
     this.$http.post('/api/records', record)
       .then((res) => this.$state.go('main'))
       .catch((err) => {
-        // FIXME handle error
-      })
+        this.Notification.error('An error has occurred, please try again later');
+        this.$log.error(err);
+      });
   }
 
   updateRecord(record){
     this.$http.put('/api/records/' + this.recordId, record)
       .then((res) => this.$state.go('main'))
       .catch((err) => {
-        // FIXME handle error
-      })
+        this.Notification.error('An error has occurred, please try again later');
+        this.$log.error(err);
+      });
   }
 
   addSlot(){

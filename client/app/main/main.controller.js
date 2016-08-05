@@ -3,11 +3,13 @@
 (function() {
 
   class MainController {
-    constructor($http, $scope, socket) {
+    constructor($http, $scope, socket, Notification, $log) {
       this.$http = $http;
       this.socket = socket;
       this.records = [];
       this.loading = true;
+      this.Notification = Notification;
+      this.$log = $log;
 
       $scope.$on('$destroy', function() {
         socket.unsyncUpdates('records');
@@ -29,8 +31,8 @@
         this.records.splice(index, 1);
         this.$http.delete('/api/records/' + record.configuration_id)
           .catch((err) => {
-            // FIXME handle error
-            console.error(err);
+            this.Notification.error('An error has occurred, please try again later');
+            this.$log.error(err);
             this.records.splice(index, 0, record);
           });
       }
