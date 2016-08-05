@@ -1,0 +1,12 @@
+.navbar{
+  @media (max-width: $screen-sm-max) {
+    a.navbar-brand{
+      display: block;
+      float: none;
+    }
+    a.btn{
+      display: block;
+    }
+    text-align: center;
+  }
+}

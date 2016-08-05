@@ -1,5 +1,7 @@
 .record-ctrl{
   .slot{
-    padding-bottom: 8px;
+    select, input, a.btn{
+      margin-bottom: 8px;
+    }
   }
 }

@@ -9,12 +9,13 @@
            ng-hide="ctrl.loading"
            ng-show="ctrl.records.length > 0">
         <div class="col-lg-6">
+          <button type="button" class="close hidden-lg" ng-click="ctrl.removeRecord(record)">&times;</button>
           <h2>{{record.name}}</h2>
           <p>{{record.description}}</p>
-          <a ui-sref="record/edit({recordId: record.configuration_id})">Edit</a>
+          <a ui-sref="record/edit({recordId: record.configuration_id})" class="visible-lg">Edit</a>
         </div>
         <div class="col-lg-6">
-          <button type="button" class="close" ng-click="ctrl.removeRecord(record)">&times;</button>
+          <button type="button" class="close visible-lg" ng-click="ctrl.removeRecord(record)">&times;</button>
           <h4>Slots:</h4>
           <ul ng-show="record.slots.length > 0">
             <li ng-repeat="slot in record.slots">
@@ -23,6 +24,7 @@
             </li>
           </ul>
           <i ng-hide="record.slots.length > 0">No slots has been added</i>
+          <a ui-sref="record/edit({recordId: record.configuration_id})" class="hidden-lg">Edit</a>
         </div>
       </div>
 
