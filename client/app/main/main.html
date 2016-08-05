@@ -11,7 +11,7 @@
         <div class="col-lg-6">
           <h2>{{record.name}}</h2>
           <p>{{record.description}}</p>
-          <a ui-sref="record/edit({recordId: record._id})">Edit</a>
+          <a ui-sref="record/edit({recordId: record.configuration_id})">Edit</a>
         </div>
         <div class="col-lg-6">
           <button type="button" class="close" ng-click="ctrl.removeRecord(record)">&times;</button>

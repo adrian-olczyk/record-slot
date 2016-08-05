@@ -2,6 +2,15 @@
 
 import mongoose from 'mongoose';
 
+var schemaOptions = {
+  toObject: {
+    virtuals: true
+  },
+  toJSON: {
+    virtuals: true
+  }
+};
+
 var RecordSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -13,9 +22,9 @@ var RecordSchema = new mongoose.Schema({
     provider: Number,
     options: String
   }]
-});
+}, schemaOptions);
 
-RecordSchema.virtual('configuration_id').get(function(){
+RecordSchema.virtual('configuration_id').get(function() {
   return this._id;
 });
 

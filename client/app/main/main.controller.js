@@ -27,7 +27,7 @@
       var index = this.records.indexOf(record);
       if (index > -1 && confirm('Are you sure?')){
         this.records.splice(index, 1);
-        this.$http.delete('/api/records/' + record._id)
+        this.$http.delete('/api/records/' + record.configuration_id)
           .catch((err) => {
             // FIXME handle error
             console.error(err);
