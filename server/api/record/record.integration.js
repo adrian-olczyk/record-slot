@@ -42,7 +42,7 @@ describe('Record API:', function() {
 
       createNewRecord(newRecordData, function(err, result){
         expect(err).to.be.null;
-        result = _.omit(result, ['__v', '_id']);
+        result = _.omit(result, ['__v', '_id', 'id', 'configuration_id']);
         expect(result).to.deep.equal(newRecordData);
         done();
       });
