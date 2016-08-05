@@ -10,16 +10,22 @@ class RecordComponent {
     this.$http = $http;
     this.$state = $state;
     this.record = {};
+    this.loading = true;
 
     this.availableProviders = slotProviders;
 
     if (!this.isNew) {
-      this.fetchRecord(this.recordId);
+      this.fetchRecord(this.recordId)
+        .then(() => this.loading = false);
+    }
+    else{
+      // no need to load anything
+      this.loading = false;
     }
   }
 
   fetchRecord(recordId){
-    this.$http.get('/api/records/' + recordId)
+    return this.$http.get('/api/records/' + recordId)
       .then(response => {
         this.record = response.data;
       })
@@ -33,7 +39,7 @@ class RecordComponent {
 
   save(record){
     if (this.isNew){
-      this.createRecord(record);
+       this.createRecord(record);
     }
     else{
       this.updateRecord(record);
