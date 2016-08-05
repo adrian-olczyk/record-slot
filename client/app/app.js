@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('recordSlotApp', ['recordSlotApp.constants', 'ngCookies', 'ngResource', 'ngSanitize',
-    'btford.socket-io', 'ui.router', 'ui.bootstrap', 'angular-velocity', 'ui-notification'
+    'ui.router', 'ui.bootstrap', 'angular-velocity', 'ui-notification'
   ])
   .config(function($urlRouterProvider, $locationProvider, NotificationProvider) {
     $urlRouterProvider.otherwise('/404');

@@ -3,17 +3,12 @@
 (function() {
 
   class MainController {
-    constructor($http, $scope, socket, Notification, $log) {
+    constructor($http, Notification, $log) {
       this.$http = $http;
-      this.socket = socket;
       this.records = [];
       this.loading = true;
       this.Notification = Notification;
       this.$log = $log;
-
-      $scope.$on('$destroy', function() {
-        socket.unsyncUpdates('records');
-      });
     }
 
     $onInit() {
@@ -21,7 +16,6 @@
         .then(response => {
           this.loading = false;
           this.records = response.data;
-          this.socket.syncUpdates('records', this.records);
         });
     }
 
