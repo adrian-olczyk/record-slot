@@ -16,3 +16,6 @@ angular.module('recordSlotApp', ['recordSlotApp.constants', 'ngCookies', 'ngReso
       horizontalSpacing: 10,
     });
   });
+
+console.info("%cCurious?", "color: blue; font-size: x-large");
+console.info('This is how this website was built: https://www.youtube.com/watch?v=2J5xs2ukksE');
