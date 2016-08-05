@@ -9,6 +9,7 @@ var RecordSchema = new mongoose.Schema({
   },
   description: String,
   slots: [{
+    _id: false,
     provider: Number,
     options: String
   }]
